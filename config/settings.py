@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'planner',
+    'rest_framework',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
