@@ -41,5 +41,3 @@ class GoalDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GoalSerializer
     def get_queryset(self):
         return Goal.objects.filter(goal__user=self.request.user)
-
-
