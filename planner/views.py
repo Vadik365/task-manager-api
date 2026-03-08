@@ -1,16 +1,18 @@
-from django.shortcuts import render
-
 # Create your views here.
-from rest_framework.exceptions import PermissionDenied
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
-from .models import Goal,Task
+from .models import Goal, Task
 from .serializers import GoalSerializer, TaskSerializer
 
 class GoalListCreateView(generics.ListCreateAPIView):
     serializer_class = GoalSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [OrderingFilter, SearchFilter]
+    ordering_fields = ['id', 'title']
+    ordering = ['-id']
+    search_fields = ['title', 'description']
     def get_queryset(self):
         return Goal.objects.filter(user=self.request.user)
 
@@ -21,11 +23,17 @@ class GoalDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GoalSerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        return Goal.objects.filter(goal__user=self.request.user)
+        return Goal.objects.filter(user=self.request.user)
 
 class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['goal', 'completed']
+    ordering_fields = ['id', 'title', 'completed']
+    ordering = ['-id']
+    search_fields = ['title', 'description']
+
     # This method defines what data will be returned in GET request
     # This method filters tasks so user sees only their own tasks
     def get_queryset(self):

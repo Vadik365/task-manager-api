@@ -5,13 +5,13 @@ from .models import Goal, Task
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'category', 'user']
         read_only_fields = ['user']
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'completed', 'goal']
     def validate_goal(self, value):
         request = self.context.get('request')
 
