@@ -15,6 +15,6 @@ class TaskSerializer(serializers.ModelSerializer):
     def validate_goal(self, value):
         request = self.context.get('request')
 
-        if request in value.user != request.user:
+        if request and value.user != request.user:
             raise serializers.ValidationError(detail="You cannot use another user's goal.")
         return value
