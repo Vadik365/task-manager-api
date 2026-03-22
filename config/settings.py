@@ -99,7 +99,7 @@ DATABASES = {
         'NAME': 'planner_db',
         'USER': 'planner_user',
         'PASSWORD': '12345',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }

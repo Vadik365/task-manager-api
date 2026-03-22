@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17
+    container_name: planner_db
+    environment:
+      POSTGRES_DB: planner_db
+      POSTGRES_USER: planner_user
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: planner_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
