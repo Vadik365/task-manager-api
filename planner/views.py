@@ -1,10 +1,26 @@
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
+from django.contrib.auth.models import User
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
-from .models import Goal, Task
-from .serializers import GoalSerializer, TaskSerializer
+from rest_framework.serializers import ModelSerializer
+from .models import Goal, Task, Category
+from .serializers import GoalSerializer, TaskSerializer, CategorySerializer
+
+class RegisterSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
 
 class GoalListCreateView(generics.ListCreateAPIView):
     serializer_class = GoalSerializer
@@ -50,3 +66,9 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Task.objects.filter(goal__user=self.request.user)
 
+class CategoryListView(generics.ListCreateAPIView):
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Category.objects.all()

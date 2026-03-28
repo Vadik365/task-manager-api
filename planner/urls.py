@@ -3,9 +3,11 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import GoalListCreateView, GoalDetailView, TaskListCreateView, TaskDetailView
+from .views import GoalListCreateView, GoalDetailView, TaskListCreateView, TaskDetailView, RegisterView, CategoryListView
 
 urlpatterns = [
+    path('register/', RegisterView.as_view(), name ='register'),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
     path('goals/', GoalListCreateView.as_view(), name ='goal-list-create'),
     path('goals/<int:pk>/', GoalDetailView.as_view(), name ='goal-detail'),
 
