@@ -2,15 +2,29 @@ import { useState } from 'react';
 import api from '../api/axios';
 import TaskItem from './TaskItem';
 
-function GoalCard({ goal, onUpdate }) {
+function GoalCard({ goal, categories, colors, onUpdate }) {
   const [tasks, setTasks] = useState([]);
   const [showTasks, setShowTasks] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
 
+  const category = categories.find((c) => c.id === goal.category);
+  const colorIndex = categories.indexOf(category);
+  const color = colors[colorIndex % colors.length] ?? '#534AB7';
+
+  const bgMap = {
+    '#534AB7': '#EEEDFE',
+    '#0F6E56': '#E1F5EE',
+    '#993C1D': '#FAECE7',
+    '#185FA5': '#E6F1FB',
+    '#993556': '#FBEAF0',
+  };
+  const bgColor = bgMap[color] ?? '#EEEDFE';
+
   const fetchTasks = async () => {
     try {
       const res = await api.get(`tasks/?goal=${goal.id}`);
-      setTasks(res.data);
+      const data = res.data;
+      setTasks(Array.isArray(data) ? data : data.results ?? []);
     } catch (err) {
       console.error(err);
     }
@@ -23,6 +37,7 @@ function GoalCard({ goal, onUpdate }) {
 
   const handleAddTask = async (e) => {
     e.preventDefault();
+    if (!taskTitle.trim()) return;
     try {
       await api.post('tasks/', { title: taskTitle, goal: goal.id });
       setTaskTitle('');
@@ -41,38 +56,56 @@ function GoalCard({ goal, onUpdate }) {
     }
   };
 
+  const completed = tasks.filter((t) => t.completed).length;
+  const total = tasks.length;
+  const progress = total > 0 ? (completed / total) * 100 : 0;
+
   return (
-    <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 16 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h3 style={{ margin: 0 }}>{goal.title}</h3>
-          {goal.description && (
-            <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>{goal.description}</p>
-          )}
+    <div className="goal-card">
+      <div className="goal-header">
+        <div className="goal-icon" style={{ background: bgColor, color }}>
+          {goal.title.charAt(0).toUpperCase()}
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={toggleTasks} style={{ padding: '6px 12px' }}>
-            {showTasks ? 'Hide tasks' : 'Show tasks'}
+        <div className="goal-info">
+          <div className="goal-title">{goal.title}</div>
+          {goal.description && (
+            <div className="goal-desc">{goal.description}</div>
+          )}
+          <div className="goal-desc">{category?.name ?? ''}</div>
+        </div>
+
+        {showTasks && total > 0 && (
+          <div className="progress-wrap">
+            <div className="progress-bar-bg">
+              <div className="progress-bar" style={{ width: `${progress}%`, background: color }}></div>
+            </div>
+            <div className="progress-pct">{completed} / {total}</div>
+          </div>
+        )}
+
+        <div className="goal-actions">
+          <button className="btn-secondary" onClick={toggleTasks}>
+            {showTasks ? 'Hide' : 'Tasks'}
           </button>
-          <button onClick={handleDeleteGoal} style={{ padding: '6px 12px', color: 'red' }}>
+          <button className="btn-danger" onClick={handleDeleteGoal}>
             Delete
           </button>
         </div>
       </div>
 
       {showTasks && (
-        <div style={{ marginTop: 16 }}>
+        <div className="tasks">
           {tasks.map((task) => (
             <TaskItem key={task.id} task={task} onUpdate={fetchTasks} />
           ))}
-          <form onSubmit={handleAddTask} style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+          <form className="task-add-form" onSubmit={handleAddTask}>
             <input
-              placeholder="Task title"
+              className="input"
+              placeholder="New task..."
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
-              style={{ flex: 1, padding: 8 }}
             />
-            <button type="submit" style={{ padding: '8px 16px' }}>
+            <button className="btn-primary" type="submit" style={{ whiteSpace: 'nowrap' }}>
               + Add
             </button>
           </form>

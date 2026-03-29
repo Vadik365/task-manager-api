@@ -24,34 +24,32 @@ function Login() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '100px auto', padding: 24 }}>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <div>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2>Sign in</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleLogin}>
           <input
-            placeholder="Login"
+            className="input"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{ width: '100%', marginBottom: 12, padding: 8 }}
           />
-        </div>
-        <div>
           <input
+            className="input"
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', marginBottom: 12, padding: 8 }}
           />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: 8 }}>
-          Sign In
-        </button>
-      </form>
-      <p style={{ marginTop: 12 }}>
-        Don't have an account? <Link to="/register">Sign Up</Link>
-      </p>
+          <button className="btn-primary" type="submit" style={{ width: '100%', padding: '10px' }}>
+            Sign in
+          </button>
+        </form>
+        <p className="auth-link">
+          No account? <Link to="/register">Register</Link>
+        </p>
+      </div>
     </div>
   );
 }

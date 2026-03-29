@@ -17,39 +17,37 @@ function Register() {
       });
       navigate('/login');
     } catch (err) {
-      setError('Registrarion failed. Try a different username.');
+      setError('Registration error. Try a different username.');
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '100px auto', padding: 24 }}>
-      <h2>Sign Up</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleRegister}>
-        <div>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2>Create account</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleRegister}>
           <input
+            className="input"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{ width: '100%', marginBottom: 12, padding: 8 }}
           />
-        </div>
-        <div>
           <input
+            className="input"
             type="password"
-            placeholder="Passwrd"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', marginBottom: 12, padding: 8 }}
           />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: 8 }}>
-          Sign Up
-        </button>
-      </form>
-      <p style={{ marginTop: 12 }}>
-        Already have an account? <Link to="/login">Sign In</Link>
-      </p>
+          <button className="btn-primary" type="submit" style={{ width: '100%', padding: '10px' }}>
+            Register
+          </button>
+        </form>
+        <p className="auth-link">
+          Already have an account? <Link to="/login">Sign in</Link>
+        </p>
+      </div>
     </div>
   );
 }

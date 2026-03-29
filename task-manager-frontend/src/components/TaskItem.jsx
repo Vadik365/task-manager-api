@@ -20,21 +20,17 @@ function TaskItem({ task, onUpdate }) {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', borderBottom: '1px solid #f0f0f0' }}>
+    <div className="task-row">
       <input
         type="checkbox"
+        className="task-checkbox"
         checked={task.completed}
         onChange={handleToggle}
       />
-      <span style={{
-        flex: 1,
-        fontSize: 14,
-        textDecoration: task.completed ? 'line-through' : 'none',
-        color: task.completed ? '#999' : '#000'
-      }}>
+      <span className={`task-label ${task.completed ? 'done' : ''}`}>
         {task.title}
       </span>
-      <button onClick={handleDelete} style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14 }}>
+      <button className="btn-danger" onClick={handleDelete}>
         Delete
       </button>
     </div>

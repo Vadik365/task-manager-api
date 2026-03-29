@@ -68,7 +68,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class CategoryListView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         return Category.objects.all()
