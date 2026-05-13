@@ -68,7 +68,9 @@ CORS_ALLOWED_ORIGINS = [
     'https://task-manager-frontend-azure-two.vercel.app',
 ]
 CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "False") == "True"
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://task-manager-api-production-c7f3.up.railway.app',
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
