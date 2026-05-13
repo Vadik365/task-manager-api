@@ -67,6 +67,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'https://task-manager-frontend-azure-two.vercel.app',
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
